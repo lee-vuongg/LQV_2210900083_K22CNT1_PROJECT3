@@ -1,0 +1,134 @@
+/* Tổng thể */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f1f5f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.content-wrapper {
+    padding: 30px;
+}
+
+/* Tiêu đề */
+h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Card container */
+.card {
+    border: none;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #4f46e5, #3b82f6);
+    color: #ffffff;
+    padding: 15px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+
+.card-title {
+    margin: 0;
+}
+
+/* Form */
+form {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #1f2937;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.form-control:focus {
+    border-color: #4f46e5;
+    background: #ffffff;
+    box-shadow: 0 0 8px rgba(79, 70, 229, 0.15);
+    outline: none;
+}
+
+select.form-control {
+    cursor: pointer;
+}
+
+/* Button */
+button, a.btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
+}
+
+button i, a.btn i {
+    margin-right: 8px;
+}
+
+.btn-primary {
+    background: #4f46e5;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #4338ca;
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e1;
+    transform: scale(1.05);
+}
+
+/* Alert */
+.alert-danger {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+}
