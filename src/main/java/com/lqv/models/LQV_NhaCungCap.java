@@ -6,18 +6,18 @@ public class LQV_NhaCungCap {
     private int LQVid;
     private String LQV_ten_nha_cung_cap;
     private String LQV_dia_chi;
-    private String LQV_so_dien_thoai;
+    private String LQV_dien_thoai;
     private String LQV_email;
     private Date LQV_ngay_sua;
 
 
     public LQV_NhaCungCap() {}
 
-    public LQV_NhaCungCap(int LQVid, String LQV_ten_nha_cung_cap, String LQV_dia_chi, String LQV_so_dien_thoai, String LQV_email) {
+    public LQV_NhaCungCap(int LQVid, String LQV_ten_nha_cung_cap, String LQV_dia_chi, String LQV_email, String LQV_dien_thoai) {
         this.LQVid = LQVid;
         this.LQV_ten_nha_cung_cap = LQV_ten_nha_cung_cap;
         this.LQV_dia_chi = LQV_dia_chi;
-        this.LQV_so_dien_thoai = LQV_so_dien_thoai;
+        this.LQV_dien_thoai = LQV_dien_thoai;
         this.LQV_email = LQV_email;
     }
 
@@ -53,12 +53,12 @@ public class LQV_NhaCungCap {
         this.LQV_dia_chi = LQV_dia_chi;
     }
 
-    public String getLQV_so_dien_thoai() {
-        return LQV_so_dien_thoai;
+    public String getLQV_dien_thoai() {
+        return LQV_dien_thoai;
     }
 
-    public void setLQV_so_dien_thoai(String LQV_so_dien_thoai) {
-        this.LQV_so_dien_thoai = LQV_so_dien_thoai;
+    public void setLQV_dien_thoai(String LQV_dien_thoai) {
+        this.LQV_dien_thoai = LQV_dien_thoai;
     }
 
     public String getLQV_email() {

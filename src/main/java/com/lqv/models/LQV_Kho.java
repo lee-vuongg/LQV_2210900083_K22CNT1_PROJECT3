@@ -3,16 +3,16 @@ package com.lqv.models;
 public class LQV_Kho {
     private int LQVid;
     private String LQV_ten_kho;
-    private String LQV_dia_chi;
+    private String LQV_vi_tri;  // Đã sửa lỗi dấu
     private String LQV_nguoi_quan_ly;
     private int LQV_suc_chua;
 
     public LQV_Kho() {}
 
-    public LQV_Kho(int LQVid, String LQV_ten_kho, String LQV_dia_chi, String LQV_nguoi_quan_ly, int LQV_suc_chua) {
+    public LQV_Kho(int LQVid, String LQV_ten_kho, String LQV_vi_tri, String LQV_nguoi_quan_ly, int LQV_suc_chua) {
         this.LQVid = LQVid;
         this.LQV_ten_kho = LQV_ten_kho;
-        this.LQV_dia_chi = LQV_dia_chi;
+        this.LQV_vi_tri = LQV_vi_tri;
         this.LQV_nguoi_quan_ly = LQV_nguoi_quan_ly;
         this.LQV_suc_chua = LQV_suc_chua;
     }
@@ -33,12 +33,12 @@ public class LQV_Kho {
         this.LQV_ten_kho = LQV_ten_kho;
     }
 
-    public String getLQV_dia_chi() {
-        return LQV_dia_chi;
+    public String getLQV_vi_tri() {  // Đã sửa lỗi tên biến
+        return LQV_vi_tri;
     }
 
-    public void setLQV_dia_chi(String LQV_dia_chi) {
-        this.LQV_dia_chi = LQV_dia_chi;
+    public void setLQV_vi_tri(String LQV_vi_tri) {  // Đã sửa lỗi tên biến
+        this.LQV_vi_tri = LQV_vi_tri;
     }
 
     public String getLQV_nguoi_quan_ly() {

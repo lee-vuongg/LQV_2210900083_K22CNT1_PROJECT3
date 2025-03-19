@@ -10,6 +10,7 @@ public class LQV_QuanTriVien {
     private Date LQV_ngay_tao;
     private Date LQV_ngay_sua;
     private String role;  // "admin" hoặc "khach"
+	private String LQV_role;
 
 
     public LQV_QuanTriVien() {
@@ -26,6 +27,14 @@ public class LQV_QuanTriVien {
         this.LQV_ngay_sua = LQV_ngay_sua;
     }
 
+    // ✅ Getter và Setter cho role
+    public String getLQV_role() {
+        return LQV_role;
+    }
+
+    public void setLQV_role(String LQV_role) {
+        this.LQV_role = LQV_role;
+    }
     public int getLQVid() {
         return LQVid;
     }

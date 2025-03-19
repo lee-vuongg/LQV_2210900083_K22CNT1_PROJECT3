@@ -45,7 +45,7 @@
                         <td><%= ncc.getLQVid() %></td>
                         <td><%= ncc.getLQV_ten_nha_cung_cap() %></td>
                         <td><%= ncc.getLQV_dia_chi() %></td>
-                        <td><%= ncc.getLQV_so_dien_thoai() %></td>
+                        <td><%= ncc.getLQV_dien_thoai() %></td>
                         <td><%= ncc.getLQV_email() %></td>
                         <td>
                             <button class="edit-btn" onclick="editNCC(<%= ncc.getLQVid() %>)">✏ Sửa</button>

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.util.List;
 
@@ -24,8 +25,12 @@ public class LQV_NhaCungCapServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
+    	request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
         String action = request.getParameter("action");
-        if (action == null) action = "list";
+        if (action == null || action.isEmpty()) action = "list";
 
         try {
             switch (action) {
@@ -36,7 +41,7 @@ public class LQV_NhaCungCapServlet extends HttpServlet {
                     showEditForm(request, response);
                     break;
                 case "insert":
-                    request.getRequestDispatcher("views/quantrivien/pages/NhaCungCap/add.jsp").forward(request, response);
+                    forwardToPage(request, response, "/views/quantrivien/pages/NhaCungCap/add.jsp");
                     break;
                 case "delete":
                     deleteNhaCungCap(request, response);
@@ -45,17 +50,16 @@ public class LQV_NhaCungCapServlet extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST, "⚠️ Action không hợp lệ!");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "❌ Đã xảy ra lỗi hệ thống!");
+            log("❌ Lỗi trong doGet: " + e.getMessage(), e);
+            response.sendRedirect(request.getContextPath() + "/nhacungcap?action=list&error=" + URLEncoder.encode("❌ Đã xảy ra lỗi hệ thống!", "UTF-8"));
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-
-        if (action == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "⚠️ Thiếu tham số action!");
+        if (action == null || action.isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/nhacungcap?action=list&error=" + URLEncoder.encode("⚠️ Action không hợp lệ!", "UTF-8"));
             return;
         }
 
@@ -65,134 +69,98 @@ public class LQV_NhaCungCapServlet extends HttpServlet {
                     insertNhaCungCap(request, response);
                     break;
                 case "update":
-                    updateNhaCungCap(request, response);
+                    update(request, response);
                     break;
                 default:
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "⚠️ Action không hợp lệ!");
+                    response.sendRedirect(request.getContextPath() + "/nhacungcap?action=list&error=" + URLEncoder.encode("⚠️ Action không hợp lệ!", "UTF-8"));
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "❌ Đã xảy ra lỗi hệ thống!");
+            log("❌ Lỗi trong doPost: " + e.getMessage(), e);
+            response.sendRedirect(request.getContextPath() + "/nhacungcap?action=list&error=" + URLEncoder.encode("❌ Đã xảy ra lỗi hệ thống!", "UTF-8"));
         }
     }
-
     private void listNhaCungCap(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<LQV_NhaCungCap> danhSachNCC = nhaCungCapDAO.getAll();
         request.setAttribute("danhSachNCC", danhSachNCC);
-        request.getRequestDispatcher("views/quantrivien/pages/NhaCungCap/list.jsp").forward(request, response);
+        forwardToPage(request, response, "views/quantrivien/pages/NhaCungCap/list.jsp");
     }
 
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            System.out.println("ID nhận được: " + id); // Debug: Kiểm tra id
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        LQV_NhaCungCap ncc = nhaCungCapDAO.getById(id);
 
-            LQV_NhaCungCapDAO nhaCungCapDAO = new LQV_NhaCungCapDAO();
-            LQV_NhaCungCap ncc = nhaCungCapDAO.getById(id);
-
-            if (ncc != null) {
-                System.out.println("Thông tin nhà cung cấp: " + ncc.getLQV_ten_nha_cung_cap()); // Debug: Kiểm tra thông tin
-                request.setAttribute("ncc", ncc);
-                request.getRequestDispatcher("/views/quantrivien/pages/NhaCungCap/edit.jsp").forward(request, response);
-            } else {
-                System.out.println("❌ Không tìm thấy thông tin nhà cung cấp với id: " + id);
-                request.setAttribute("errorMessage", "Không tìm thấy thông tin nhà cung cấp!");
-                request.getRequestDispatcher("/views/quantrivien/pages/NhaCungCap/edit.jsp").forward(request, response);
+        if (ncc != null) {
+            request.setAttribute("ncc", ncc);
+            forwardToPage(request, response, "/views/quantrivien/pages/NhaCungCap/edit.jsp");
+        } else {
+            if (!response.isCommitted()) {
+                response.sendRedirect(request.getContextPath() + "/nhacungcap?action=list&error=notfound");
             }
-        } catch (NumberFormatException e) {
-            System.out.println("❌ Lỗi định dạng ID!");
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID không hợp lệ!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Đã xảy ra lỗi hệ thống!");
         }
     }
 
-
-    private void insertNhaCungCap(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void insertNhaCungCap(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String tenNCC = request.getParameter("tenNCC");
             String diaChi = request.getParameter("diaChi");
             String soDienThoai = request.getParameter("soDienThoai");
             String email = request.getParameter("email");
 
-            if (tenNCC.trim().isEmpty() || diaChi.trim().isEmpty() || soDienThoai.trim().isEmpty() || email.trim().isEmpty()) {
+            // Kiểm tra dữ liệu đầu vào
+            if (tenNCC == null || tenNCC.trim().isEmpty() ||
+                diaChi == null || diaChi.trim().isEmpty() ||
+                soDienThoai == null || soDienThoai.trim().isEmpty() ||
+                email == null || email.trim().isEmpty()) {
                 request.setAttribute("error", "⚠️ Vui lòng điền đầy đủ thông tin!");
-                request.getRequestDispatcher("views/quantrivien/pages/NhaCungCap/add.jsp").forward(request, response);
+                forwardToPage(request, response, "/views/quantrivien/pages/NhaCungCap/add.jsp");
                 return;
             }
 
+            // Kiểm tra định dạng email
             if (!email.contains("@")) {
                 request.setAttribute("error", "⚠️ Email không hợp lệ!");
-                request.getRequestDispatcher("views/quantrivien/pages/NhaCungCap/add.jsp").forward(request, response);
+                forwardToPage(request, response, "/views/quantrivien/pages/NhaCungCap/add.jsp");
                 return;
             }
 
-            Date ngaySua = new Date(System.currentTimeMillis()); // Lấy ngày hiện tại
-
+            // Tạo đối tượng nhà cung cấp
             LQV_NhaCungCap nhaCungCap = new LQV_NhaCungCap(0, tenNCC, diaChi, soDienThoai, email);
-            nhaCungCap.setLQV_ngay_sua(ngaySua);
+            nhaCungCap.setLQV_ngay_sua(new Date(System.currentTimeMillis()));
 
+            // Chèn vào CSDL
             if (nhaCungCapDAO.insert(nhaCungCap)) {
                 request.getSession().setAttribute("success", "✅ Thêm nhà cung cấp thành công!");
+                response.sendRedirect(request.getContextPath() + "/nhacungcap?action=list");
             } else {
                 request.setAttribute("error", "❌ Thêm nhà cung cấp thất bại!");
-                request.getRequestDispatcher("views/quantrivien/pages/NhaCungCap/add.jsp").forward(request, response);
-                return;
+                forwardToPage(request, response, "/views/quantrivien/pages/NhaCungCap/add.jsp");
             }
-
-            response.sendRedirect("nhacungcap?action=list");
-        } catch (NumberFormatException e) {
-            request.setAttribute("error", "⚠️ Dữ liệu không hợp lệ!");
-            request.getRequestDispatcher("views/quantrivien/pages/NhaCungCap/add.jsp").forward(request, response);
+        } catch (Exception e) {
+            log("❌ Lỗi trong insertNhaCungCap: " + e.getMessage(), e);
+            request.setAttribute("error", "❌ Đã xảy ra lỗi hệ thống!");
+            forwardToPage(request, response, "/views/quantrivien/pages/NhaCungCap/add.jsp");
         }
     }
 
-    private void updateNhaCungCap(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        try {
-            int id = Integer.parseInt(request.getParameter("id"));
-            String tenNCC = request.getParameter("tenNCC");
-            String diaChi = request.getParameter("diaChi");
-            String soDienThoai = request.getParameter("soDienThoai");
-            String email = request.getParameter("email");
+    private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Update function called");
 
-            LQV_NhaCungCap nhaCungCapCu = nhaCungCapDAO.getById(id);
-            if (nhaCungCapCu == null) {
-                request.setAttribute("error", "⚠️ Nhà cung cấp không tồn tại!");
-                listNhaCungCap(request, response);
-                return;
-            }
+        int id = Integer.parseInt(request.getParameter("id"));
+        String ten = request.getParameter("ten");
+        String diaChi = request.getParameter("diaChi");
+        String dienThoai = request.getParameter("dienThoai");
+        String email = request.getParameter("email");
 
-            if (tenNCC.trim().isEmpty() || diaChi.trim().isEmpty() || soDienThoai.trim().isEmpty() || email.trim().isEmpty()) {
-                request.setAttribute("error", "⚠️ Vui lòng điền đầy đủ thông tin!");
-                showEditForm(request, response);
-                return;
-            }
+        LQV_NhaCungCap ncc = new LQV_NhaCungCap(id, ten, diaChi, dienThoai, email);
+        boolean isUpdated = nhaCungCapDAO.update(ncc);
 
-            if (!email.contains("@")) {
-                request.setAttribute("error", "⚠️ Email không hợp lệ!");
-                showEditForm(request, response);
-                return;
-            }
-
-            Date ngaySua = new Date(System.currentTimeMillis()); // Cập nhật ngày sửa mới
-
-            LQV_NhaCungCap nhaCungCapMoi = new LQV_NhaCungCap(id, tenNCC, diaChi, soDienThoai, email);
-            nhaCungCapMoi.setLQV_ngay_sua(ngaySua);
-
-            if (nhaCungCapDAO.update(nhaCungCapMoi)) {
-                request.getSession().setAttribute("success", "✅ Cập nhật nhà cung cấp thành công!");
-            } else {
-                request.setAttribute("error", "❌ Cập nhật nhà cung cấp thất bại!");
-                showEditForm(request, response);
-                return;
-            }
-
-            response.sendRedirect("nhacungcap?action=list");
-        } catch (NumberFormatException e) {
-            request.setAttribute("error", "⚠️ Dữ liệu không hợp lệ!");
-            showEditForm(request, response);
+        if (isUpdated) {
+            System.out.println("✅ Update thành công! Chuyển hướng...");
+            response.sendRedirect(request.getContextPath() + "/nhacungcap?action=list&success=✔️ Cập nhật thành công!");
+        } else {
+            System.out.println("❌ Update thất bại! Trả về trang sửa.");
+            request.setAttribute("errorMessage", "❌ Cập nhật thất bại!");
+            request.getRequestDispatcher("pages/NhacCungCap/edit.jsp").forward(request, response);
         }
     }
 
@@ -202,6 +170,13 @@ public class LQV_NhaCungCapServlet extends HttpServlet {
             response.getWriter().write(nhaCungCapDAO.delete(id) ? "success" : "fail");
         } catch (NumberFormatException e) {
             response.getWriter().write("fail");
+        }
+    }
+
+    private void forwardToPage(HttpServletRequest request, HttpServletResponse response, String page) throws ServletException, IOException {
+        if (!response.isCommitted()) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+            dispatcher.forward(request, response);
         }
     }
 }

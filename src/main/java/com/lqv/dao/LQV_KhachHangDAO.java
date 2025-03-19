@@ -45,40 +45,49 @@ public class LQV_KhachHangDAO {
     }
 
     // Thêm khách hàng mới
-    public boolean insert(LQV_KhachHang kh) {
-        String query = "INSERT INTO LQV_KhachHang (LQV_tai_khoan, LQV_mat_khau, LQV_ho_ten, LQV_email, LQV_dia_chi, LQV_so_dien_thoai, LQV_trang_thai, LQV_ngay_tao) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+    public boolean insertKhachHang(LQV_KhachHang kh) {
+        String sql = "INSERT INTO LQV_KhachHang (LQV_tai_khoan, LQV_mat_khau, LQV_ho_ten, LQV_email, LQV_dia_chi, LQV_so_dien_thoai, LQV_trang_thai) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, kh.getLQV_tai_khoan());
+            ps.setString(2, kh.getLQV_mat_khau());
+            ps.setString(3, kh.getLQV_ho_ten());
+            ps.setString(4, kh.getLQV_email());
+            ps.setString(5, kh.getLQV_dia_chi());
+            ps.setString(6, kh.getLQV_so_dien_thoai());
+            ps.setBoolean(7, kh.isLQV_trang_thai());
 
-            stmt.setString(1, kh.getLQV_tai_khoan());
-            stmt.setString(2, kh.getLQV_mat_khau());
-            stmt.setString(3, kh.getLQV_ho_ten());
-            stmt.setString(4, kh.getLQV_email());
-            stmt.setString(5, kh.getLQV_dia_chi());
-            stmt.setString(6, kh.getLQV_so_dien_thoai());
-            stmt.setBoolean(7, kh.isLQV_trang_thai());
-
-            return stmt.executeUpdate() > 0;
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted > 0;  // Trả về true nếu thêm thành công
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return false;  // Trả về false nếu có lỗi
     }
 
     // Cập nhật thông tin khách hàng
-    public boolean update(LQV_KhachHang kh) {
-        String query = "UPDATE LQV_KhachHang SET LQV_tai_khoan = ?, LQV_mat_khau = ?, LQV_ho_ten = ?, LQV_email = ?, LQV_dia_chi = ?, LQV_so_dien_thoai = ?, LQV_trang_thai = ?, LQV_ngay_sua = NOW() WHERE LQVid = ?";
+    public boolean update(LQV_KhachHang khachHang) {
+        String sql = "UPDATE LQV_KhachHang SET LQV_tai_khoan=?, LQV_mat_khau=?, LQV_ho_ten=?, LQV_email=?, LQV_dia_chi=?, LQV_so_dien_thoai=?, LQV_trang_thai=?, LQV_ngay_sua=? WHERE LQVid=?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, khachHang.getLQV_tai_khoan());
+            stmt.setString(2, khachHang.getLQV_mat_khau());
+            stmt.setString(3, khachHang.getLQV_ho_ten());
+            stmt.setString(4, khachHang.getLQV_email());
+            stmt.setString(5, khachHang.getLQV_dia_chi());
+            stmt.setString(6, khachHang.getLQV_so_dien_thoai());
+            stmt.setBoolean(7, khachHang.isLQV_trang_thai());
 
-            stmt.setString(1, kh.getLQV_tai_khoan());
-            stmt.setString(2, kh.getLQV_mat_khau());
-            stmt.setString(3, kh.getLQV_ho_ten());
-            stmt.setString(4, kh.getLQV_email());
-            stmt.setString(5, kh.getLQV_dia_chi());
-            stmt.setString(6, kh.getLQV_so_dien_thoai());
-            stmt.setBoolean(7, kh.isLQV_trang_thai());
-            stmt.setInt(8, kh.getLQVid());
+            // Cập nhật ngày sửa với thời gian hiện tại
+            Timestamp ngaySua = new Timestamp(System.currentTimeMillis());
+            stmt.setTimestamp(8, ngaySua);
+
+            stmt.setInt(9, khachHang.getLQVid()); // Đặt ID vào vị trí thứ 9
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -120,6 +129,39 @@ public class LQV_KhachHangDAO {
         return null;
     }
 
+    // Đăng ký khách hàng mới
+    public boolean register(LQV_KhachHang kh) {
+        // Kiểm tra email đã tồn tại chưa
+        if (isEmailExist(kh.getLQV_email())) {
+            return false; // Email đã tồn tại, không thể đăng ký
+        }
+
+        String sql = "INSERT INTO LQV_KhachHang (LQV_tai_khoan, LQV_mat_khau, LQV_ho_ten, LQV_email, LQV_dia_chi, LQV_so_dien_thoai, LQV_trang_thai, LQV_ngay_tao) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, kh.getLQV_tai_khoan());
+            ps.setString(2, kh.getLQV_mat_khau());
+            ps.setString(3, kh.getLQV_ho_ten());
+            ps.setString(4, kh.getLQV_email());
+            ps.setString(5, kh.getLQV_dia_chi());
+            ps.setString(6, kh.getLQV_so_dien_thoai());
+            ps.setBoolean(7, kh.isLQV_trang_thai());
+
+            // Gán ngày tạo là thời gian hiện tại
+            Timestamp ngayTao = new Timestamp(System.currentTimeMillis());
+            ps.setTimestamp(8, ngayTao);
+
+            return ps.executeUpdate() > 0; // Trả về true nếu đăng ký thành công
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;  // Trả về false nếu có lỗi
+    }
+
     // Kiểm tra email đã tồn tại chưa
     public boolean isEmailExist(String email) {
         String query = "SELECT 1 FROM LQV_KhachHang WHERE LQV_email = ?";
@@ -128,7 +170,7 @@ public class LQV_KhachHangDAO {
 
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next();
+                return rs.next(); // Trả về true nếu có kết quả
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,7 +178,7 @@ public class LQV_KhachHangDAO {
         return false;
     }
 
-    // Ánh xạ từ ResultSet sang đối tượng LQV_KhachHang
+    // Hàm hỗ trợ ánh xạ từ ResultSet sang đối tượng LQV_KhachHang
     private LQV_KhachHang mapResultSetToKhachHang(ResultSet rs) throws SQLException {
         return new LQV_KhachHang(
                 rs.getInt("LQVid"),

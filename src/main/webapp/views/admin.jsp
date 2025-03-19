@@ -28,9 +28,10 @@
             <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/views/quantrivien/pages/dashboard.jsp"><i class="fas fa-home"></i> Trang chủ</a></li>
             <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/views/quantrivien/pages/admin/list.jsp"><i class="fas fa-user-shield"></i> Quản lý Admin</a></li>
 			 <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/views/quantrivien/pages/VatTu/list.jsp"><i class="fas fa-user-shield"></i> Quản lý vật tư</a></li>
-            <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/LQV_KhachHangServlet"><i class="fas fa-users"></i> Quản lý Khách hàng</a></li>
-            <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/LQV_DonDatHangServlet"><i class="fas fa-shopping-cart"></i> Quản lý Đơn hàng</a></li>
-            <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/LQV_KhoServlet"><i class="fas fa-warehouse"></i> Quản lý Kho</a></li>
+            <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/views/quantrivien/pages/khachhang/list.jsp"><i class="fas fa-users"></i> Quản lý Khách hàng</a></li>
+             <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/views/quantrivien/pages/lichsusudung/list.jsp"><i class="fas fa-shopping-cart"></i> Lịch Sử Sử Dụng</a></li>
+            <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/dondathang?action=list"><i class="fas fa-shopping-cart"></i> Quản lý Đơn hàng</a></li>
+            <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/kho?action=list"><i class="fas fa-warehouse"></i> Quản lý Kho</a></li>
             <li><a href="#" class="nav-link" data-page="<%= request.getContextPath() %>/views/quantrivien/pages/NhaCungCap/list.jsp"><i class="fas fa-truck"></i> Quản lý Nhà cung cấp</a></li>
             <li><a href="<%= request.getContextPath() %>/quantrivien?action=logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
         </ul>

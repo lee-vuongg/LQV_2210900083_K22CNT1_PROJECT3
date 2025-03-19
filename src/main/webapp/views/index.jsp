@@ -38,22 +38,22 @@
     <!-- Danh mục thiết bị y tế -->
     <div class="category-container">
         <div class="category-card">
-            <img src="<%= request.getContextPath() %>/views/styles/images/thietbi1.jpg" alt="Thiết bị 1">
+            <img src="<%= request.getContextPath() %>/views/styles/images/TC3.jpg" alt="Thiết bị 1">
             <h3>Thiết bị chẩn đoán hình ảnh</h3>
             <a href="#"><i class="fas fa-info-circle"></i> Xem chi tiết</a>
         </div>
         <div class="category-card">
-            <img src="<%= request.getContextPath() %>/views/styles/images/thietbi2.jpg" alt="Thiết bị 2">
+            <img src="<%= request.getContextPath() %>/views/styles/images/TC2.jpg" alt="Thiết bị 2">
             <h3>Thiết bị hồi sức cấp cứu</h3>
             <a href="#"><i class="fas fa-info-circle"></i> Xem chi tiết</a>
         </div>
         <div class="category-card">
-            <img src="<%= request.getContextPath() %>/views/styles/images/thietbi3.jpg" alt="Thiết bị 3">
+            <img src="<%= request.getContextPath() %>/views/styles/images/TC!.jpg" alt="Thiết bị 3">
             <h3>Thiết bị lọc máu</h3>
             <a href="#"><i class="fas fa-info-circle"></i> Xem chi tiết</a>
         </div>
         <div class="category-card">
-            <img src="<%= request.getContextPath() %>/views/styles/images/thietbi4.jpg" alt="Thiết bị 4">
+            <img src="<%= request.getContextPath() %>/views/styles/images/TC2.jpg" alt="Thiết bị 4">
             <h3>Thiết bị phòng mổ</h3>
             <a href="#"><i class="fas fa-info-circle"></i> Xem chi tiết</a>
         </div>

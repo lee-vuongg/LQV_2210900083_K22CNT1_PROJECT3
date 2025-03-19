@@ -13,6 +13,7 @@ public class LQV_KhachHang {
     private boolean LQV_trang_thai;
     private Date LQV_ngay_tao;
     private Date LQV_ngay_sua;
+    private String LQV_role;
 
     public LQV_KhachHang() {
         this.LQV_ngay_tao = new Date();
@@ -28,10 +29,18 @@ public class LQV_KhachHang {
         this.LQV_dia_chi = LQV_dia_chi;
         this.LQV_so_dien_thoai = LQV_so_dien_thoai;
         this.LQV_trang_thai = LQV_trang_thai;
-        this.LQV_ngay_tao = LQV_ngay_tao;
+        this.LQV_ngay_tao = (LQV_ngay_tao != null) ? LQV_ngay_tao : new Date();
         this.LQV_ngay_sua = LQV_ngay_sua;
     }
+    public String getLQV_role() {
+        return LQV_role;
+    }
 
+    public void setLQV_role(String LQV_role) {
+        this.LQV_role = LQV_role;
+    }
+    
+    
     public int getLQVid() {
         return LQVid;
     }

@@ -22,11 +22,11 @@
         <!-- Nút thêm quản trị viên -->
         <div class="actions">
             <button class="add-btn" onclick="window.location.href='<%= request.getContextPath() %>/views/quantrivien/pages/admin/add.jsp'">➕ Thêm Quản Trị Viên</button>
-        
         </div>
-         <div class="card-footer text-center">
-                    <a href="<%= request.getContextPath() %>/views/admin.jsp" class="btn btn-link">Quay lại trang chủ</a>
-                </div>
+
+        <div class="card-footer text-center">
+            <a href="<%= request.getContextPath() %>/views/admin.jsp" class="btn btn-link">Quay lại trang chủ</a>
+        </div>
 
         <table border="1" cellspacing="0" cellpadding="8">
             <thead>
@@ -84,9 +84,9 @@
         }
     }
 
-        function editAdmin(id) {
-            window.location.href = "<%= request.getContextPath() %>/views/quantrivien/pages/admin/edit.jsp?id=" + id;
-        }
+    function editAdmin(id) {
+        window.location.href = "<%= request.getContextPath() %>/views/quantrivien/pages/admin/edit.jsp?id=" + id;
+    }
     </script>
 
 </body>

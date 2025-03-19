@@ -23,6 +23,8 @@ public class LQV_BaoTriThietBiServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
         String action = request.getParameter("action");
         if (action == null) action = "list";
 
@@ -40,6 +42,8 @@ public class LQV_BaoTriThietBiServlet extends HttpServlet {
     }
 
     private void listBaoTri(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
         List<LQV_BaoTriThietBi> danhSachBaoTri = baoTriThietBiDAO.getAll();
         request.setAttribute("danhSachBaoTri", danhSachBaoTri);
         request.getRequestDispatcher("/views/baotri/list.jsp").forward(request, response);
